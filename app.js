@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 // Importando o Sequelize e o modelo User
 var sequelize = require('./models').sequelize;
@@ -16,6 +17,11 @@ var paymentsRouter = require('./routes/payments');
 var app = express();
 
 app.use(logger('dev'));
+app.use(cors({ // Configurar o CORS corretamente
+    origin: 'http://localhost:3000', // URL do front-end
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    credentials: true // Permitir envio de cookies e headers de autenticação
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

@@ -5,27 +5,15 @@ class PaymentController{
         this.paymentService = PaymentService;
     }
 
-    async paymentByCreditCard(req,res){
-        const {userId, valorTotal, status} = req.body;
+    async payment(req,res){
+        const {userId, valorTotal, metodoPagamento, status} = req.body;
         try{
-            const newPaymentByCreditCard = await this.paymentService.paymentByCreditCard(userId, valorTotal, status);
-            res.status(200).json(newPaymentByCreditCard);
+            const newPayment = await this.paymentService.payment(userId, valorTotal, metodoPagamento, status);
+            res.status(200).json(newPayment);
             res.send();
         }
         catch(error){
-            res.status(500).json({error: 'Ocorreu um erro ao processar o pagamento via cartão de crédito.'});
-        }
-    }
-
-    async paymentByPix(req,res){
-        const {userId, valorTotal, status} = req.body;
-        try{
-            const newPaymentByPix = await this.paymentService.paymentByPix(userId, valorTotal, status);
-            res.status(200).json(newPaymentByPix);
-            res.send();
-        }
-        catch(error){
-            res.status(500).json({error: 'Ocorreu um erro ao processar o pagamento via Pix.'});
+            res.status(500).json({error: 'Ocorreu um erro ao processar o pagamento.'});
         }
     }
 

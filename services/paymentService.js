@@ -8,31 +8,15 @@ class PaymentService{
         this.Payment = PaymentModel;
     }
 
-    async paymentByCreditCard(userId, valorTotal, status){
+    async payment(userId, valorTotal, metodoPagamento, status){
         try{
-            const newPaymentByCreditCard = await this.Payment.create({
+            const newPayment = await this.Payment.create({
                 userId:userId,
                 valorTotal:valorTotal,
-                metodoPagamento: "Cartão de crédito",
+                metodoPagamento:metodoPagamento,
                 status:status
             });
-            return newPaymentByCreditCard? newPaymentByCreditCard : null;
-            
-        }
-        catch (error){
-            throw error;
-        }
-    }
-
-    async paymentByPix(userId, valorTotal, status){
-        try{
-            const newPaymentByPix = await this.Payment.create({
-                userId:userId,
-                valorTotal:valorTotal,
-                metodoPagamento: "Pix",
-                status:status
-            });
-            return newPaymentByPix? newPaymentByPix : null;
+            return newPayment? newPayment : null;
             
         }
         catch (error){

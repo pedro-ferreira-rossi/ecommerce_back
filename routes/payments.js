@@ -17,12 +17,8 @@ router.get('/', function(req, res, next) {
     res.send('Módulo de pagamento rodando.');
 });
 
-router.post('/creditCard', auth.verifyToken, async (req,res)=>{
-    paymentController.paymentByCreditCard(req,res);
-});
-
-router.post('/pix', auth.verifyToken, async (req,res)=>{
-    paymentController.paymentByPix(req,res);
+router.post('/pagamento', auth.verifyToken, async (req,res)=>{
+    paymentController.payment(req,res);
 });
 
 router.get('/consultarPagamento', auth.verifyToken, async (req,res)=>{

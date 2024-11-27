@@ -1,5 +1,6 @@
 // ./services/userService.js
 const auth = require('../auth');
+const bcrypt = require('bcrypt');
 
 const db = require('../models');
 
@@ -10,6 +11,7 @@ class UserService{
 
     async create(email, data_nasc, password){
         try{
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = await this.User.create({
                 email:email,
                 data_nasc:data_nasc,
@@ -52,12 +54,12 @@ class UserService{
     async login(email, password){
         try{
             const User = await this.User.findOne({
-                where : {email}
+            where : {email}
             });
             //Se o usuário existe, ver se a senha está ok
-            if(User){ 
-               // preencher depois, porque a senha precisa ser criptografada 
-               //Gerar o token do user
+            if(User){
+                // preencher depois, porque a senha precisa ser criptografada
+                //Gerar o token do user
                 const token = await auth.generateToken(User);
                 User.dataValues.Token = token;
                 User.dataValues.password = '';
