@@ -15,7 +15,7 @@ class UserService{
             const newUser = await this.User.create({
                 email:email,
                 data_nasc:data_nasc,
-                password:password
+                password:hashedPassword
             });
             return newUser? newUser : null;
             
@@ -58,18 +58,24 @@ class UserService{
             });
             //Se o usuário existe, ver se a senha está ok
             if(User){
-                // preencher depois, porque a senha precisa ser criptografada
-                //Gerar o token do user
-                const token = await auth.generateToken(User);
-                User.dataValues.Token = token;
-                User.dataValues.password = '';
+                console.log('E-mail recebido:', email);
+                console.log('Senha recebida:', password);
+                console.log('Senha armazenada (hash):', User.password);
+                const isValidPassword = await bcrypt.compare(password, User.password);
+                if(isValidPassword){
+                    const token = await auth.generateToken(User);
+                    User.dataValues.Token = token;
+                    User.dataValues.password = '';
+                } else {
+                    throw new Error('Senha inválida');
+                }
             }
             return User? User:null;
         }
         catch(error){
             throw error;
         }
-
+    
     }
 }
 

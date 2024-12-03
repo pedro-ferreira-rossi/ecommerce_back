@@ -42,6 +42,7 @@ class UserController{
     //Método para login
     async login(req,res){
         const {email, password} = req.body;
+        console.log('Corpo da requisição:', req.body);
         try{
             const User  = await this.userService.login(email, password);
             //Atenção! Vai ter um problema de segurança
