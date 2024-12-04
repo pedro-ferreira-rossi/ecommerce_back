@@ -9,13 +9,14 @@ class UserService{
         this.User = UserModel;
     }
 
-    async create(email, data_nasc, password){
+    async create(email, data_nasc, password, userType){
         try{
             const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = await this.User.create({
                 email:email,
                 data_nasc:data_nasc,
-                password:hashedPassword
+                password:hashedPassword,
+                userType:userType
             });
             return newUser? newUser : null;
             
@@ -58,13 +59,10 @@ class UserService{
             });
             //Se o usuário existe, ver se a senha está ok
             if(User){
-                console.log('E-mail recebido:', email);
-                console.log('Senha recebida:', password);
-                console.log('Senha armazenada (hash):', User.password);
                 const isValidPassword = await bcrypt.compare(password, User.password);
                 if(isValidPassword){
                     const token = await auth.generateToken(User);
-                    User.dataValues.Token = token;
+                    User.dataValues.token = token;
                     User.dataValues.password = '';
                 } else {
                     throw new Error('Senha inválida');

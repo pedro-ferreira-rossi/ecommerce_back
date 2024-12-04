@@ -34,7 +34,7 @@ router.get('/allusers', auth.verifyToken, async(req,res)=>{
 });
 
 //Rota para retonar um usuário pelo id
-router.get('/getUserById', async (req,res)=>{
+router.get('/getUserById', auth.verifyToken, async (req,res)=>{
   userController.findUserById(req,res);
 });
 

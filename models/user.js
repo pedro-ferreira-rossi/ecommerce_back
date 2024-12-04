@@ -19,6 +19,13 @@ module.exports = (sequelize) =>{
         password:{
             type: Sequelize.STRING,
             allowNull:false
+        },
+        userType:{
+            type: Sequelize.STRING,
+            allowNull:false,
+            validate: {
+                isIn: [['normal', 'fornecedor']],
+            }
         }
     });
     return User;

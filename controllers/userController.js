@@ -6,9 +6,9 @@ class UserController{
     }
     async createUser(req,res){
         //processar a request
-        const {email, data_nasc, password} = req.body;
+        const {email, data_nasc, password, userType} = req.body;
         try{
-            const newUser = await this.userService.create(email, data_nasc, password);
+            const newUser = await this.userService.create(email, data_nasc, password, userType);
             res.status(200).json(newUser);
             res.send();
         }
@@ -42,11 +42,23 @@ class UserController{
     //Método para login
     async login(req,res){
         const {email, password} = req.body;
-        console.log('Corpo da requisição:', req.body);
         try{
             const User  = await this.userService.login(email, password);
-            //Atenção! Vai ter um problema de segurança
-            res.status(200).json(User);
+            if (User) {
+                // Se o login for bem-sucedido, devolve o token junto com os dados do usuário
+                const response = {
+                    user: {
+                        id: User.id,
+                        email: User.email,
+                        userType: User.userType
+                        // qualquer outro dado que você queira retornar do usuário
+                    },
+                    token: User.dataValues.Token, // o token gerado
+                };
+                res.status(200).json(response);
+            } else {
+                res.status(400).json({ error: 'Credenciais inválidas' });
+            }
         }
         catch(error){
             res.status(500).json({error: 'Erro ao logar o usuário'});
